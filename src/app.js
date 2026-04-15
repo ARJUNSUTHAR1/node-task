@@ -6,9 +6,25 @@ const env = require("./config/env");
 
 const app = express();
 
+const corsOrigin =
+  env.clientOrigins === "*"
+    ? true
+    : (origin, cb) => {
+        if (!origin) {
+          cb(null, true);
+          return;
+        }
+        const o = origin.replace(/\/$/, "");
+        if (Array.isArray(env.clientOrigins) && env.clientOrigins.includes(o)) {
+          cb(null, true);
+          return;
+        }
+        cb(null, false);
+      };
+
 app.use(
   cors({
-    origin: env.clientUrl === "*" ? true : env.clientUrl,
+    origin: corsOrigin,
   })
 );
 app.use(express.json());

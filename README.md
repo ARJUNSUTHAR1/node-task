@@ -14,7 +14,11 @@ Copy the environment template and fill in your real values.
 cp .env.example .env
 ```
 
-Edit `.env` so `DATABASE_URL` points at your database and `JWT_SECRET` is a long random string. If you use the Vite dev server for the frontend, keep `CLIENT_URL` aligned with that origin (for example `http://localhost:5173`).
+Edit `.env` so `DATABASE_URL` points at your database and `JWT_SECRET` is a long random string.
+
+`CLIENT_URL` is what the API uses for CORS. It must list every browser origin that will call the API, not the API URL itself. Use a comma-separated list with no spaces, for example `http://localhost:5173,https://your-app.vercel.app`. The value must match the site origin exactly (`https`, no path, usually no trailing slash). Putting the Vercel URL only in the frontend env does not fix CORS; the API env must allow that origin too. For a quick test you can set `CLIENT_URL` to `*` (allow any origin).
+
+Serve the API over `https` when the site is on `https`, otherwise the browser may block mixed content before CORS even runs.
 
 Install dependencies and create the sample data when you are ready.
 

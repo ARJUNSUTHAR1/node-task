@@ -10,20 +10,21 @@ for (const key of required) {
   }
 }
 
+const parseOrigins = (raw) => {
+  if (raw == null || raw === "" || raw === "*") return "*";
+  return raw
+    .split(",")
+    .map((s) => s.trim().replace(/\/$/, ""))
+    .filter(Boolean);
+};
+
 const env = {
   port: Number(process.env.PORT) || 5000,
   clientUrl: process.env.CLIENT_URL || "*",
+  clientOrigins: parseOrigins(process.env.CLIENT_URL),
   databaseUrl: process.env.DATABASE_URL,
   jwtSecret: process.env.JWT_SECRET,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "1d",
-  userTable: process.env.USER_TABLE || "users",
-  userIdColumn: process.env.USER_ID_COLUMN || "id",
-  userEmailColumn: process.env.USER_EMAIL_COLUMN || "email",
-  userPasswordColumn: process.env.USER_PASSWORD_COLUMN || "password",
-  userNameColumn: process.env.USER_NAME_COLUMN || "",
-  userRoleColumn: process.env.USER_ROLE_COLUMN || "",
-  allowPlainTextPasswords:
-    String(process.env.ALLOW_PLAIN_TEXT_PASSWORDS).toLowerCase() === "true",
 };
 
 module.exports = env;
